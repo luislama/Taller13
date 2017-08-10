@@ -18,7 +18,7 @@ void* productor(void * arg)
   {
     pthread_mutex_lock(&mutex);
     while(cola == tam_cola)
-      pthread_cond_wait(&condicionProductor,&mutex)
+      pthread_cond_wait(&condicionProductor,&mutex);
     cola++;
     producidos++;
     if(producidos == total_items)
@@ -37,7 +37,7 @@ void* consumidor(void * arg)
   {  
     pthread_mutex_lock(&mutex);
     while(cola == 0)
-      pthread_condition_wait(&condicionCOnsumidor,&mutex)
+      pthread_condition_wait(&condicionConsumidor,&mutex);
     cola--;  
     if(producidos == total_items && cola == 0)
       salir = 1;
@@ -47,13 +47,12 @@ void* consumidor(void * arg)
   return (void*)1;  
 }
 
-int tam_cola = 0;
-
 void mostrarinfo(int nhilos_prod, int nhilos_cons, double tiempo_cons, double tiempo_prod, int total_items);
 
 int main(int argc, char** argv)
 {
-  if (argc!=7){
+  if (argc!=7)
+  {
   	printf("Uso del programa <num_hilos_prod> <tiempo_prod> <num_hilos_cons> <tiempo_cons> <tam_cola> <total_items>\n");
   	return -1;
   }
@@ -65,27 +64,38 @@ int main(int argc, char** argv)
   tam_cola = atoi(argv[5]);
   int total_items = atoi(argv[6]);
 
-  mostrarinfo(nhilos_prod, nhilos_cons, tiempo_cons, tiempo_prod, total_items);
+  mostrarinfo(nhilos_prod, nhilos_cons, tiempo_cons, tiempo_prod,total_items);
 
   condicionConsumidor = PTHREAD_COND_INITIALIZER;
   condicionProductor = PTHREAD_COND_INITIALIZER;
 
   int maxHilos = 0;
-  if(nhilos_cons > nhilos_pro)
-    maxhilos = nhilos_cons
+  if(nhilos_cons > nhilos_prod)
+    maxHilos = nhilos_cons;
   else
-    maxhilos = nhilos_prod
+    maxHilos = nhilos_prod;
   
-  pthread_t *listProd = (pthread_t *)malloc(sifeof(pthread_t)*nhilos_prod);  
-  pthread_t *listCons = (pthread_t *)malloc(sifeof(pthread_t)*nhilos_cons);
+  pthread_t *listProd = (pthread_t *)malloc(sizeof(pthread_t)*nhilos_prod);  
+  pthread_t *listCons = (pthread_t *)malloc(sizeof(pthread_t)*nhilos_cons);
+
+  pthread_mutex_init(&mutex, NULL);
 
   for(int i = 0; i<maxHilos ; i++ )
   {
     if(i<nhilos_cons)
-      pthread_create(&(listCons[i]),NULL,productor,null); 
+      pthread_create(&(listCons[i]),NULL,productor,NULL); 
     if(i<nhilos_prod)     
-      pthread_create(&(listProd[i]),NULL,productor,null);
+      pthread_create(&(listProd[i]),NULL,productor,NULL);
   }
+
+  for(int i = 0; i<maxHilos ; i++ )
+  {
+    if(i<nhilos_cons)
+      pthread_join(listCons[i],NULL); 
+    if(i<nhilos_prod)     
+      pthread_join(listProd[i],NULL);
+  }
+
 
   return 0;
 }
