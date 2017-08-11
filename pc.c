@@ -88,7 +88,7 @@ int main(int argc, char** argv)
   for(int i = 0; i<maxHilos ; i++ )
   {
     if(i<nhilos_cons)
-      pthread_create(&(listCons[i]),NULL,productor,&i); 
+      pthread_create(&(listCons[i]),NULL,consumidor,&i); 
     if(i<nhilos_prod)     
       pthread_create(&(listProd[i]),NULL,productor,&i);
   }
@@ -110,5 +110,5 @@ void mostrarinfo(int nhilos_prod, int nhilos_cons, double tiempo_cons, double ti
 	printf("Número de consumidores: %d\n", nhilos_cons);
 	printf("Tiempo de consumo: %.2f segundos\n", tiempo_cons*1000000);
 	printf("Tiempo de producción: %.2f segundos\n", tiempo_prod*1000000);
-	printf("Total de ítems a producir: %d elementos.\n", total_items);
+	printf("Total de ítems a producir: %d elementos.\n\n", total_items);
 }
