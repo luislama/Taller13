@@ -134,7 +134,7 @@ int main(int argc, char** argv)
         pthread_create(&(listProd[i]),NULL,productor,ids+i);
       if(i<nhilos_cons)
         //pthread_create(&(listCons[i]),NULL,consumidor,&(ids[i])); -->FALLA
-        //pthread_create(&(listCons[i]),NULL,consumidor,&p);        -->FALLA
+        //pthread_create(&(listCons[i]),NULL,consumidor,&c);        -->FALLA
         pthread_create(&(listCons[i]),NULL,consumidor,ids+i); 
     }
 
